@@ -11,6 +11,7 @@ Controls for lizard's abilities are the same as in Safari mode :
 - Down + Pickup = Let go of the lizard
 
 Creature shortcuts and dens will be shown whenever riding a tamed lizard, and yes, you can use them!
+<br>
 (P.S. creatures shortcuts don't have the same animations as other pipes do, but they still take as much time to use as travelling a pipe - the downtime period after going into a creature shortcut is not a bug!)
 
 ***
