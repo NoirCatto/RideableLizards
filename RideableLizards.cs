@@ -41,7 +41,7 @@ public partial class RideableLizards : BaseUnityPlugin
         On.RainWorld.Update += RainWorld_Update;
         On.GameSession.ctor += GameSessionOnctor;
         
-    } //todo: add drop button for when liz is holding prey
+    }
 
     private const float LizLikeThreshold = 0.5f;
 

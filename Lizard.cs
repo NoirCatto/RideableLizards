@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using MoreSlugcats;
 using RWCustom;
 using UnityEngine;
 
@@ -99,11 +100,19 @@ public partial class RideableLizards
 
             self.SafariControlInputUpdate(players.First().playerState.playerNumber); //Controls
             
-            if (self.inputWithDiagonals.Value.y == -1 && self.inputWithDiagonals.Value.pckp) 
+            if ((self.inputWithDiagonals != null) && self.inputWithDiagonals.Value.y == -1 && self.inputWithDiagonals.Value.pckp) 
             {
                 players.First().ThrowObject(0, players.First().evenUpdate); //Release lizard
             }
-
+            if ((self.lastInputWithDiagonals != null && self.inputWithDiagonals != null) && self.inputWithDiagonals.Value.pckp && !self.lastInputWithDiagonals.Value.pckp) 
+            {
+                self.LoseAllGrasps(); //Release grabbed critter
+            }
+            if ((self.inputWithDiagonals != null) && self.inputWithDiagonals.Value.jmp)
+            {
+                players.First().tongue?.Release();
+            }
+                
         }
         else
         {

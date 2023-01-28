@@ -24,7 +24,7 @@ public partial class RideableLizards
     
     private bool PlayerOnIsObjectThrowable(On.Player.orig_IsObjectThrowable orig, Player self, PhysicalObject obj)
     {
-        if (obj is Lizard)
+        if (obj is Lizard liz && !liz.State.dead)
         {
             return false;
         }
@@ -41,11 +41,11 @@ public partial class RideableLizards
             x?.grabbed).FirstOrDefault(y => y is Lizard liz &&
             liz.AI.LikeOfPlayer(liz.AI.tracker.RepresentationForCreature(self.abstractCreature, false)) > LizLikeThreshold);
 
-        if (friend != null && friend is Lizard l) //If grabbed onto liz
+        if (friend != null && friend is Lizard l && !l.State.dead) //If grabbed onto an alive liz
         {
             if (l.grabbedBy.Select(x => x.grabber).First(x => x is Player) == self) //If first player holding a lizard
             {
-                self.controller = new StopPlayerController(); //Stop player's inputs //todo: If Saint is a second player grabbing a lizard and first player ejects, Saint has no way to retract his tongue
+                self.controller = new StopPlayerController(); //Stop player's inputs
             }
 
             if (!SlugDeets.ContainsKey(self))
