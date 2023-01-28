@@ -17,5 +17,6 @@ Please report any bugs to me!
 P.S.S. - This is not the same as the v1.5 RW version! This is a completely re-written mod, so the gameplay may feel a bit different too.
 ***
 [Steam Workshop Link](https://steamcommunity.com/sharedfiles/filedetails/?id=2923554821)
+[ZIP Release](https://github.com/NoirCatto/RideableLizards/releases)
 # Non-Workshop Installation
-If you're on a non-steam installation of the game, get the RideableLizards folder and copy it into `Rain World/RainWorld_Data/StreamingAssets/mods`
+If you're on a non-steam installation of the game, get the RideableLizards zip and copy the folder inside into `Rain World/RainWorld_Data/StreamingAssets/mods`
