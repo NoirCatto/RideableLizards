@@ -1,4 +1,6 @@
-# RideableLizards (Rain World v1.9)
+# RideableLizards
+The mod is for v1.9 version of Rain World!
+
 Description : <br> 
 Grab onto your tamed lizards and ride along with them!
 
