@@ -74,4 +74,8 @@
     </Reference>
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="cp -T &quot;/home/master/Coding/CSharp/Rain World/RideableLizards/obj/Debug/net48/RideableLizards.dll&quot; &quot;/home/master/Games/Rain World/RainWorld_Data/StreamingAssets/mods/RideableLizards/plugins/RideableLizards.dll&quot;" />
+  </Target>
+
 </Project>

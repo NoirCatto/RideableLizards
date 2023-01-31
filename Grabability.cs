@@ -1,4 +1,7 @@
+using System;
 using System.Linq;
+using Mono.Cecil.Cil;
+using MonoMod.Cil;
 using MoreSlugcats;
 using UnityEngine;
 
@@ -10,7 +13,7 @@ public partial class RideableLizards
     {
         if (obj is Lizard liz)
         {
-            if (liz.AI.LikeOfPlayer(liz.AI.tracker.RepresentationForCreature(self.abstractCreature, false)) > LizLikeThreshold) //Only allowed to grab tamed lizards
+            if (LikesPlayer(self, liz)) //Only allowed to grab tamed lizards
             {
                 return Player.ObjectGrabability.TwoHands;
             }
@@ -36,5 +39,10 @@ public partial class RideableLizards
         }
         
         return orig(self, obj, graspused, chunkgrabbed, shareability, dominance, overrideequallydominant, pacifying);
+    }
+    
+    private bool PlayerOnIsCreatureLegalToHoldWithoutStun(On.Player.orig_IsCreatureLegalToHoldWithoutStun orig, Player self, Creature grabcheck) //Arti fix
+    {
+        return grabcheck is Lizard || orig(self, grabcheck);
     }
 }

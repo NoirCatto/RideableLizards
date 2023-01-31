@@ -14,8 +14,11 @@ public partial class RideableLizards
     {
         public readonly List<float> SlugChunksMass; //List,  in case a custom slug has more than 2 bodychunks...`
 
-        public SlugData()
+        public Lizard GrabbedLiz;
+
+        public SlugData(Lizard grabbedLiz)
         {
+            GrabbedLiz = grabbedLiz;
             SlugChunksMass = new List<float>();
         }
     }
@@ -39,7 +42,7 @@ public partial class RideableLizards
         
         var friend = self.grasps.Select(x =>
             x?.grabbed).FirstOrDefault(y => y is Lizard liz &&
-            liz.AI.LikeOfPlayer(liz.AI.tracker.RepresentationForCreature(self.abstractCreature, false)) > LizLikeThreshold);
+            LikesPlayer(self, liz));
 
         if (friend != null && friend is Lizard l && !l.State.dead) //If grabbed onto an alive liz
         {
@@ -50,7 +53,7 @@ public partial class RideableLizards
 
             if (!SlugDeets.ContainsKey(self))
             {
-                SlugDeets.Add(self, new SlugData());
+                SlugDeets.Add(self, new SlugData(l));
 
                 foreach (var chunk in self.bodyChunks)
                 {
