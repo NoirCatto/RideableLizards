@@ -34,7 +34,6 @@ public class RideableLizards : BaseUnityPlugin
 
             Hooks.Apply();
             LizardHeart.LoadAtlases();
-            Log.Apply();
         }
         catch (Exception ex)
         {

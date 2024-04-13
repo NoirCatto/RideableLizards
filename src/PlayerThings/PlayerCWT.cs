@@ -19,7 +19,6 @@ public static class PlayerCWT
             return true;
         }
 
-        Log.Once($"Creature {crit.ToString()} is NOT a Slugcat!!!");
         playerData = null;
         return false;
     }

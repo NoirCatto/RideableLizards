@@ -18,7 +18,6 @@ public static class LizardCWT
             return true;
         }
 
-        Log.Once($"Creature {crit.ToString()} is NOT a Lizard!!!");
         lizData = null;
         return false;
     }

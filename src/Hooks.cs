@@ -1,5 +1,6 @@
 using RideableLizards.LizardThings;
 using RideableLizards.PlayerThings;
+using UnityEngine;
 
 namespace RideableLizards;
 
@@ -12,6 +13,8 @@ public static class Hooks
         On.LizardAI.Update += LizardMovement.LizardAIOnUpdate;
         On.FriendTracker.RunSpeed += LizardMovement.FriendTrackerOnRunSpeed;
         On.FriendTracker.Utility += LizardBehaviors.FriendTrackerOnUtility;
+        On.ShortcutGraphics.Draw += LizardShortcutGraphics.ShortcutGraphicsOnDraw;
+        On.ShortcutGraphics.GenerateSprites += LizardShortcutGraphics.ShortcutGraphicsOnGenerateSprites;
 
         On.Player.Update += PlayerOnUpdate;
         On.Player.Grabability += LizardGrabability.PlayerOnGrabability;
