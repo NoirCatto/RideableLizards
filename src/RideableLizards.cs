@@ -3,8 +3,6 @@ using System.Security;
 using System.Security.Permissions;
 using BepInEx;
 using BepInEx.Logging;
-using RideableLizards.LizardThings;
-using RideableLizards.PlayerThings;
 
 #pragma warning disable CS0618
 
