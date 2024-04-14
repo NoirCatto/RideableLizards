@@ -26,8 +26,8 @@ public static class LizardCWT
 public class LizardData(AbstractCreature owner)
 {
     public readonly AbstractCreature Owner = owner;
-    public readonly DebugDestinationVisualizer DestinationVisualizer = new DebugDestinationVisualizer
-        (owner.world.game.abstractSpaceVisualizer, owner.world, owner.abstractAI?.RealAI.pathFinder, Color.green); //todo disable on debug
+    // public readonly DebugDestinationVisualizer DestinationVisualizer = new DebugDestinationVisualizer
+    //     (owner.world.game.abstractSpaceVisualizer, owner.world, owner.abstractAI?.RealAI.pathFinder, Color.green);
 
     public Player Rider => Riders.FirstOrDefault();
     public IEnumerable<Player> Riders
@@ -39,12 +39,32 @@ public class LizardData(AbstractCreature owner)
         }
     }
 
+    public bool Jumping;
+    public int JumpCounter;
+    public const int JumpLinger = 15;
     public void Update(bool eu)
     {
-        DestinationVisualizer.Update();
-        var room = Owner.realizedCreature?.room;
-        if (room != null && DestinationVisualizer.room != room)
-            DestinationVisualizer.ChangeRooms(room);
+        // DestinationVisualizer.Update();
+        // var room = Owner.realizedCreature?.room;
+        // if (room != null && DestinationVisualizer.room != room)
+        //     DestinationVisualizer.ChangeRooms(room);
+
+        var lizGraphics = (LizardGraphics)Owner.realizedCreature?.graphicsModule;
+        if (lizGraphics != null)
+        {
+            if (Jumping)
+            {
+                if (JumpCounter < JumpLinger)
+                {
+                    JumpCounter++;
+                }
+                else
+                {
+                    JumpCounter = 0;
+                    Jumping = false;
+                }
+            }
+        }
     }
 
 }

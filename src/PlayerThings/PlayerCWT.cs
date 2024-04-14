@@ -32,10 +32,12 @@ public class PlayerData(AbstractCreature owner)
     public bool RidingALizard => Owner.realizedCreature != null && Owner.realizedCreature.grasps.Any(x => x?.grabbed is Lizard liz && liz.LikesPlayer((Player)Owner.realizedCreature));
     public bool LastRidingALizard;
     public IEnumerable<float> BodyChunksMass = new List<float>();
+    public int JumpCounter;
+    public int LastJumpCounter;
 
     public void Update(bool eu)
     {
-        var self = Owner.realizedCreature;
+        var self = (Player)Owner.realizedCreature;
         if (RidingALizard && !LastRidingALizard)
         {
             BodyChunksMass = self.bodyChunks.Select(x => x.mass).ToArray();
@@ -55,5 +57,10 @@ public class PlayerData(AbstractCreature owner)
         }
 
         LastRidingALizard = RidingALizard;
+
+        if (self.input[0].jmp) JumpCounter++;
+        else JumpCounter = 0;
+        if (self.input[1].jmp) LastJumpCounter++;
+        else LastJumpCounter = 0;
     }
 }

@@ -10,6 +10,8 @@ public static class Hooks
     {
         On.Lizard.Update += LizardOnUpdate;
         On.Lizard.AttemptBite += LizardBehaviors.LizardOnAttemptBite;
+        On.Lizard.Act += LizardMovement.LizardOnAct;
+        On.LizardGraphics.Update += LizardMovement.LizardGraphicsOnUpdate;
         On.LizardAI.Update += LizardMovement.LizardAIOnUpdate;
         On.FriendTracker.RunSpeed += LizardMovement.FriendTrackerOnRunSpeed;
         On.FriendTracker.Utility += LizardBehaviors.FriendTrackerOnUtility;

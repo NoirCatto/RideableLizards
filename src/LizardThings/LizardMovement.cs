@@ -1,4 +1,5 @@
 using System.Linq;
+using RideableLizards.PlayerThings;
 using RWCustom;
 using UnityEngine;
 
@@ -6,6 +7,77 @@ namespace RideableLizards.LizardThings;
 
 public static class LizardMovement
 {
+    public static void LizardOnAct(On.Lizard.orig_Act orig, Lizard self)
+    {
+        orig(self);
+
+        if (!self.TryGetLizardData(out var lizardData))
+            return;
+        if (lizardData.Rider == null || !lizardData.Rider.TryGetPlayerData(out var playerData))
+            return;
+
+        if (playerData.JumpCounter > 0)
+        {
+            if (playerData.LastJumpCounter == 0)
+            {
+                //todo handle rocketjump sound start here?
+
+                if (self.jumpModule == null) //Standard lizards get instant response
+                {
+                    Jump(lizardData);
+                }
+            }
+            //after
+        }
+        else if (playerData.LastJumpCounter != 0)
+        {
+            if (self.jumpModule != null)
+            {
+                if (playerData.LastJumpCounter < 10) //Cyan lizards will have small delay, but should be good enough
+                {
+                    Jump(lizardData);
+                }
+                else
+                {
+                    //Rocket jump
+                }
+            }
+            //todo end rocketjump here?
+        }
+    }
+
+    public static void Jump(LizardData lizardData)
+    {
+        var self = (Lizard)lizardData.Owner.realizedCreature;
+        var aimPos = lizardData.Rider.input[0].analogueDir;
+        if (self.LegsGripping <= 0) return;
+
+        lizardData.Jumping = true;
+        for (var i = 0; i < self.bodyChunks.Length; i++)
+        {
+            self.bodyChunks[i].pos += aimPos * ((self.bodyChunks.Length - i + 1f) / self.bodyChunks.Length) * 5f;
+            self.bodyChunks[i].vel += aimPos * ((self.bodyChunks.Length - i + 1f) / self.bodyChunks.Length) * 12.5f; //15f?
+        }
+    }
+
+    public static void LizardGraphicsOnUpdate(On.LizardGraphics.orig_Update orig, LizardGraphics self)
+    {
+        orig(self);
+
+        if (!self.lizard.TryGetLizardData(out var lizardData))
+            return;
+        if (lizardData.Rider == null || !lizardData.Rider.TryGetPlayerData(out var playerData))
+            return;
+
+        if (lizardData.Jumping)
+        {
+            self.legsGrabbing = 0;
+            self.frontLegsGrabbing = 0;
+            self.hindLegsGrabbing = 0;
+            self.noGripCounter = LizardData.JumpLinger;
+        }
+    }
+
     public static void LizardAIOnUpdate(On.LizardAI.orig_Update orig, LizardAI ai)
     {
         if (ai.lizard.TryGetLizardData(out var lizardData) && lizardData.Rider != null && ai.lizard.room != null)
@@ -38,7 +110,8 @@ public static class LizardMovement
     public const int TilesAwayToCheck = 10;
     public static WorldCoordinate GetDestination(LizardData lizardData, WorldCoordinate? fromSlopeDest = null)
     {
-        var lizard = lizardData.Owner.realizedCreature;
+        var lizard = (Lizard)lizardData.Owner.realizedCreature;
+        var lizardGraphics = (LizardGraphics)lizard.graphicsModule;
         var rider = lizardData.Rider;
         var room = lizard.room;
 
@@ -55,6 +128,27 @@ public static class LizardMovement
         {
             var chosenOne = shortcutsCloseBy.OrderBy(x => Custom.Dist(x.destinationCoord.Tile.ToVector2(), aimPos.Tile.ToVector2())).First();
             return chosenOne.destinationCoord;
+        }
+
+        //Help grabbing vertical poles
+        if (rider.input[0].y >= 1 && rider.input[0].x == 0 && room.Tiles != null)
+        {
+            if (!lizardGraphics.limbs.All(x => room.GetTile(room.GetTilePosition(x.grabPos)).verticalBeam))
+            {
+                var verticalPoleTiles = room.Tiles.Cast<Room.Tile>().Where(x => x.verticalBeam &&
+                    Custom.DistLess(room.GetWorldCoordinate(new IntVector2(x.X, x.Y)), lizard.abstractCreature.pos, 2f)).ToArray();
+                if (verticalPoleTiles.Any())
+                {
+                    var chosenOne = verticalPoleTiles.OrderBy(x => Custom.Dist(new Vector2(x.X, x.Y), lizard.abstractCreature.pos.Tile.ToVector2())).First();
+
+                    for (var i = 2; i > 0; i--)
+                    {
+                        var destPos = room.GetWorldCoordinate(new IntVector2(chosenOne.X, chosenOne.Y + i));
+                        if (Accesible(destPos))
+                            return destPos;
+                    }
+                }
+            }
         }
 
         //Help with slope movement
