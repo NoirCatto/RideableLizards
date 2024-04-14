@@ -38,7 +38,6 @@ public class PlayerData(AbstractCreature owner)
         var self = Owner.realizedCreature;
         if (RidingALizard && !LastRidingALizard)
         {
-            //Debug.Log($"RIDING A LIZ: {self.firstChunk.mass}");
             BodyChunksMass = self.bodyChunks.Select(x => x.mass).ToArray();
             foreach (var chunk in self.bodyChunks)
             {
@@ -53,7 +52,6 @@ public class PlayerData(AbstractCreature owner)
                 var diff = savedMass == 0 ? 0 : ((savedMass * 0.1f) - self.bodyChunks[i].mass); //In case our bodymass has changed, somehow (hi RotundWorld)
                 self.bodyChunks[i].mass = savedMass - diff;
             }
-            //Debug.Log($"GOT OFF A LIZ: {self.firstChunk.mass}");
         }
 
         LastRidingALizard = RidingALizard;

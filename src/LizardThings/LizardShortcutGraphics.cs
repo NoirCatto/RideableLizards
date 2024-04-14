@@ -11,6 +11,7 @@ public static class LizardShortcutGraphics
         orig(self, timeStacker, camPos);
 
         var show = self.room.abstractRoom.entities.Any(e => e is AbstractCreature crit && crit.TryGetLizardData(out var lizData) && lizData.Rider != null);
+        if (ModManager.MSC && !show) return; //MSC disables their visibility by default, I think
 
         for (var i = 0; i < self.room.shortcuts.Length; i++)
         {
@@ -19,7 +20,7 @@ public static class LizardShortcutGraphics
             {
                 self.entranceSprites[i, 0].isVisible = show;
             }
-            else if (shortcut.shortCutType == ShortcutData.Type.RegionTransportation)
+            if (shortcut.shortCutType == ShortcutData.Type.RegionTransportation)
             {
                 self.entranceSprites[i, 0].isVisible = show;
                 if (show) self.entranceSprites[i, 0].color = Color.Lerp(self.entranceSprites[i, 0].color, Color.cyan, 0.5f);
@@ -30,7 +31,7 @@ public static class LizardShortcutGraphics
     public static void ShortcutGraphicsOnGenerateSprites(On.ShortcutGraphics.orig_GenerateSprites orig, ShortcutGraphics self)
     {
         orig(self);
-        if (ModManager.MSC) return;
+        if (ModManager.MSC) return; //Will be using MSC sprites instead
 
         for (var i = 0; i < self.room.shortcuts.Length; i++)
         {

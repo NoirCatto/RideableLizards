@@ -8,14 +8,13 @@ public static class LizardMovement
 {
     public static void LizardAIOnUpdate(On.LizardAI.orig_Update orig, LizardAI ai)
     {
-        if (ai.lizard.TryGetLizardData(out var lizardData) && lizardData.Rider != null)
+        if (ai.lizard.TryGetLizardData(out var lizardData) && lizardData.Rider != null && ai.lizard.room != null)
         {
-            if (ai.creature.realizedCreature.room?.Tiles != null && !ai.pathFinder.DoneMappingAccessibility) //Shamelessly stealing this from Rain Meadow
+            if (ai.creature.realizedCreature.room.Tiles != null && !ai.pathFinder.DoneMappingAccessibility) //Shamelessly stealing this from Rain Meadow
                 ai.pathFinder.accessibilityStepsPerFrame = ai.creature.realizedCreature.room.Tiles.Length; //Still not perfect, but better than vanilla
             else ai.pathFinder.accessibilityStepsPerFrame = 10;
 
-            if (ai.lizard.room != null)
-                ai.friendTracker.friendDest = GetDestination(lizardData);
+            ai.friendTracker.friendDest = GetDestination(lizardData);
         }
 
         orig(ai);
