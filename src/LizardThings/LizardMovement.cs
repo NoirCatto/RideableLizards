@@ -18,29 +18,19 @@ public static class LizardMovement
 
         if (playerData.JumpCounter > 0)
         {
-            if (playerData.LastJumpCounter == 0)
+            if (playerData.LastJumpCounter == 0) //Began holding jump
             {
                 //todo handle rocketjump sound start here?
 
                 if (self.jumpModule == null) //Standard lizards get instant response
-                {
                     Jump(lizardData);
-                }
             }
-            //after
         }
-        else if (playerData.LastJumpCounter != 0)
+        else if (playerData.LastJumpCounter != 0) //released jump
         {
             if (self.jumpModule != null)
             {
-                if (playerData.LastJumpCounter < 10) //Cyan lizards will have small delay, but should be good enough
-                {
-                    Jump(lizardData);
-                }
-                else
-                {
                     //Rocket jump
-                }
             }
             //todo end rocketjump here?
         }

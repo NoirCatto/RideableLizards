@@ -28,39 +28,41 @@ public static class PlayerCWT
 public class PlayerData(AbstractCreature owner)
 {
     public readonly AbstractCreature Owner = owner;
+    public Player Cat => Owner.realizedCreature as Player;
 
-    public bool RidingALizard => Owner.realizedCreature != null && Owner.realizedCreature.grasps.Any(x => x?.grabbed is Lizard liz && liz.LikesPlayer((Player)Owner.realizedCreature));
+    public bool RidingALizard => Cat != null && Cat.grasps.Any(x => x?.grabbed is Lizard liz && liz.LikesPlayer(Cat));
     public bool LastRidingALizard;
     public IEnumerable<float> BodyChunksMass = new List<float>();
     public int JumpCounter;
     public int LastJumpCounter;
 
+    private const float MassMod = 0.1f;
+
     public void Update(bool eu)
     {
-        var self = (Player)Owner.realizedCreature;
         if (RidingALizard && !LastRidingALizard)
         {
-            BodyChunksMass = self.bodyChunks.Select(x => x.mass).ToArray();
-            foreach (var chunk in self.bodyChunks)
+            BodyChunksMass = Cat.bodyChunks.Select(x => x.mass).ToList();
+            foreach (var chunk in Cat.bodyChunks)
             {
-                chunk.mass *= 0.1f;
+                chunk.mass *= MassMod;
             }
         }
         else if (!RidingALizard && LastRidingALizard)
         {
-            for (var i = 0; i < self.bodyChunks.Length; i++)
+            for (var i = 0; i < Cat.bodyChunks.Length; i++)
             {
                 var savedMass = BodyChunksMass.ElementAtOrDefault(i);
-                var diff = savedMass == 0 ? 0 : ((savedMass * 0.1f) - self.bodyChunks[i].mass); //In case our bodymass has changed, somehow (hi RotundWorld)
-                self.bodyChunks[i].mass = savedMass - diff;
+                var diff = savedMass == 0 ? 0 : ((savedMass * MassMod) - Cat.bodyChunks[i].mass); //In case our bodymass has changed, somehow (hi RotundWorld)
+                Cat.bodyChunks[i].mass = savedMass - diff;
             }
         }
 
         LastRidingALizard = RidingALizard;
 
-        if (self.input[0].jmp) JumpCounter++;
+        if (Cat.input[0].jmp) JumpCounter++;
         else JumpCounter = 0;
-        if (self.input[1].jmp) LastJumpCounter++;
+        if (Cat.input[1].jmp) LastJumpCounter++;
         else LastJumpCounter = 0;
     }
 }

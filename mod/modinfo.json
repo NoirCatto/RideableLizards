@@ -1,0 +1,10 @@
+{
+  "id": "NoirCat.RideableLizards",
+  "name": "Rideable Lizards",
+  "version": "3.0.0",
+  "authors": "NoirCatto",
+  "description": "Grab onto your tamed lizards and ride along with them!",
+  "requirements": [],
+  "requirements_names": [],
+  "checksum_override_version": true
+}

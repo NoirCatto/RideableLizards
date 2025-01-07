@@ -20,11 +20,11 @@ public static class LizardShortcutGraphics
             {
                 self.entranceSprites[i, 0].isVisible = show;
             }
-            if (shortcut.shortCutType == ShortcutData.Type.RegionTransportation)
-            {
-                self.entranceSprites[i, 0].isVisible = show;
-                if (show) self.entranceSprites[i, 0].color = Color.Lerp(self.entranceSprites[i, 0].color, Color.cyan, 0.5f);
-            }
+            // if (shortcut.shortCutType == ShortcutData.Type.RegionTransportation)
+            // {
+            //     self.entranceSprites[i, 0].isVisible = show;
+            //     if (show) self.entranceSprites[i, 0].color = Color.Lerp(self.entranceSprites[i, 0].color, Color.cyan, 0.5f);
+            // }
         }
     }
 
@@ -44,14 +44,14 @@ public static class LizardShortcutGraphics
                 self.entranceSpriteLocations[i] = self.room.MiddleOfTile(self.room.shortcuts[i].StartTile) + IntVector2.ToVector2(self.room.ShorcutEntranceHoleDirection(self.room.shortcuts[i].StartTile)) * 15f;
                 self.camera.ReturnFContainer("Shortcuts").AddChild(self.entranceSprites[i, 0]);
             }
-            else if (shortcut.shortCutType == ShortcutData.Type.RegionTransportation)
-            {
-                if (self.entranceSprites[i, 0] != null)
-                    self.camera.ReturnFContainer("Shortcuts").RemoveChild(self.entranceSprites[i, 0]);
-                self.entranceSprites[i, 0] = new FSprite("Kill_White_Lizard") { scale = 0.65f };
-                self.entranceSpriteLocations[i] = self.room.MiddleOfTile(self.room.shortcuts[i].StartTile) + IntVector2.ToVector2(self.room.ShorcutEntranceHoleDirection(self.room.shortcuts[i].StartTile)) * 15f;
-                self.camera.ReturnFContainer("Shortcuts").AddChild(self.entranceSprites[i, 0]);
-            }
+            // else if (shortcut.shortCutType == ShortcutData.Type.RegionTransportation)
+            // {
+            //     if (self.entranceSprites[i, 0] != null)
+            //         self.camera.ReturnFContainer("Shortcuts").RemoveChild(self.entranceSprites[i, 0]);
+            //     self.entranceSprites[i, 0] = new FSprite("Kill_White_Lizard") { scale = 0.65f };
+            //     self.entranceSpriteLocations[i] = self.room.MiddleOfTile(self.room.shortcuts[i].StartTile) + IntVector2.ToVector2(self.room.ShorcutEntranceHoleDirection(self.room.shortcuts[i].StartTile)) * 15f;
+            //     self.camera.ReturnFContainer("Shortcuts").AddChild(self.entranceSprites[i, 0]);
+            // }
         }
     }
 }

@@ -25,17 +25,20 @@ public static class LizardCWT
 
 public class LizardData(AbstractCreature owner)
 {
+    private const bool DEBUG = true;
+
     public readonly AbstractCreature Owner = owner;
-    // public readonly DebugDestinationVisualizer DestinationVisualizer = new DebugDestinationVisualizer
-    //     (owner.world.game.abstractSpaceVisualizer, owner.world, owner.abstractAI?.RealAI.pathFinder, Color.green);
+    public Lizard Liz => Owner.realizedCreature as Lizard;
+
+    public readonly DebugDestinationVisualizer DestinationVisualizer = !DEBUG ? null : new DebugDestinationVisualizer
+        (owner.world.game.abstractSpaceVisualizer, owner.world, owner.abstractAI?.RealAI.pathFinder, Color.green);
 
     public Player Rider => Riders.FirstOrDefault();
     public IEnumerable<Player> Riders
     {
         get
         {
-            var self = (Lizard)Owner.realizedCreature;
-            return self?.grabbedBy.Select(x => x?.grabber).OfType<Player>().Where(player => self.LikesPlayer(player));
+            return Liz?.grabbedBy.Select(x => x?.grabber).OfType<Player>().Where(player => Liz.LikesPlayer(player));
         }
     }
 
@@ -44,12 +47,15 @@ public class LizardData(AbstractCreature owner)
     public const int JumpLinger = 15;
     public void Update(bool eu)
     {
-        // DestinationVisualizer.Update();
-        // var room = Owner.realizedCreature?.room;
-        // if (room != null && DestinationVisualizer.room != room)
-        //     DestinationVisualizer.ChangeRooms(room);
+        if (DEBUG)
+        {
+            DestinationVisualizer.Update();
+            var room = Liz?.room;
+            if (room != null && DestinationVisualizer.room != room)
+                DestinationVisualizer.ChangeRooms(room);
+        }
 
-        var lizGraphics = (LizardGraphics)Owner.realizedCreature?.graphicsModule;
+        var lizGraphics = (LizardGraphics)Liz?.graphicsModule;
         if (lizGraphics != null)
         {
             if (Jumping)
