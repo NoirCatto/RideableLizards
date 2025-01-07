@@ -27,12 +27,11 @@ public class LizardData(AbstractCreature owner)
 {
     private const bool DEBUG = true;
 
-    public readonly AbstractCreature Owner = owner;
-    public Lizard Liz => Owner.realizedCreature as Lizard;
-
     public readonly DebugDestinationVisualizer DestinationVisualizer = !DEBUG ? null : new DebugDestinationVisualizer
         (owner.world.game.abstractSpaceVisualizer, owner.world, owner.abstractAI?.RealAI.pathFinder, Color.green);
 
+    public readonly AbstractCreature Owner = owner;
+    public Lizard Liz => Owner.realizedCreature as Lizard;
     public Player Rider => Riders.FirstOrDefault();
     public IEnumerable<Player> Riders
     {
@@ -45,6 +44,8 @@ public class LizardData(AbstractCreature owner)
     public bool Jumping;
     public int JumpCounter;
     public const int JumpLinger = 15;
+    public LizardJumpModule.JumpFinder JumpFinder;
+
     public void Update(bool eu)
     {
         if (DEBUG)

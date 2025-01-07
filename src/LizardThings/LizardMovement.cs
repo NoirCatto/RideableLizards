@@ -16,24 +16,78 @@ public static class LizardMovement
         if (lizardData.Rider == null || !lizardData.Rider.TryGetPlayerData(out var playerData))
             return;
 
-        if (playerData.JumpCounter > 0)
+        //Stop lizor from jumping on it's own
+        if (self.jumpModule != null && self.animation == Lizard.Animation.PrepareToJump && self.jumpModule.actOnJump != lizardData.JumpFinder)
+        {
+            self.EnterAnimation(Lizard.Animation.Standard, true);
+            self.AI.behavior = LizardAI.Behavior.FollowFriend;
+        }
+
+        if (playerData.JumpCounter > 0 && playerData.JumpCounter < PlayerData.MaxJumpCounter)
         {
             if (playerData.LastJumpCounter == 0) //Began holding jump
             {
-                //todo handle rocketjump sound start here?
-
                 if (self.jumpModule == null) //Standard lizards get instant response
                     Jump(lizardData);
             }
         }
-        else if (playerData.LastJumpCounter != 0) //released jump
+        else if (playerData.LastJumpCounter != 0) //released jump or max power reached
         {
             if (self.jumpModule != null)
             {
-                    //Rocket jump
+                const float maxJumpPower = 40f;
+                var jumpFinder = new LizardJumpModule.JumpFinder(self.room, self.jumpModule, self.abstractCreature.pos.Tile, false);
+                var goal = RayTraceJumpGoal(self, playerData, out var distance);
+                jumpFinder.vel = lizardData.Rider.input[0].analogueDir * Mathf.Pow(distance/(float)TilesAwayToCheckJump, 0.5f) * maxJumpPower;
+                jumpFinder.currentJump = new LizardJumpModule.JumpFinder.JumpInstruction(self.room.MiddleOfTile(jumpFinder.startPos), jumpFinder.vel, Mathf.Pow(distance/(float)TilesAwayToCheckJump, 2f));
+                jumpFinder.currentJump.goalCell = goal;
+                jumpFinder.pos = jumpFinder.room.MiddleOfTile(jumpFinder.startPos);
+                jumpFinder.lastPos = jumpFinder.pos;
+                jumpFinder.hasVenturedAwayFromTerrain = false;
+                jumpFinder.bestJump = jumpFinder.currentJump;
+                lizardData.JumpFinder = jumpFinder;
+
+                self.jumpModule.InitiateJump(jumpFinder, false);
             }
-            //todo end rocketjump here?
         }
+    }
+
+    private const int TilesAwayToCheckJump = 30;
+    private static PathFinder.PathingCell RayTraceJumpGoal(Lizard self, PlayerData playerData, out int distance)
+    {
+        var heldPower = (playerData.LastJumpCounter / (float)PlayerData.MaxJumpCounter);
+        var skipTiles = Mathf.RoundToInt(Mathf.Lerp(5, TilesAwayToCheckJump - 1, heldPower));
+
+        bool Accesible(WorldCoordinate pos) => self.room.aimap.TileAccessibleToCreature(pos.Tile, self.Template);
+
+        for (var i = skipTiles; i <= TilesAwayToCheckJump; i++)
+        {
+            var destPos = self.abstractCreature.pos;
+            destPos.x += (int)(playerData.Cat.input[0].analogueDir.x * i);
+            destPos.y += (int)(playerData.Cat.input[0].analogueDir.y * i);
+
+            distance = i;
+
+            if (Accesible(destPos))
+                return self.AI.pathFinder.PathingCellAtWorldCoordinate(destPos);
+
+            for (var j = 1; j < 5; j++)
+            {
+                destPos = WorldCoordinate.AddIntVector(destPos, new IntVector2(0, -j));
+                if (Accesible(destPos))
+                    return self.AI.pathFinder.PathingCellAtWorldCoordinate(destPos);
+
+                destPos = WorldCoordinate.AddIntVector(destPos, new IntVector2(0, j));
+                if (Accesible(destPos))
+                    return self.AI.pathFinder.PathingCellAtWorldCoordinate(destPos);
+            }
+        }
+
+        distance = skipTiles;
+        var destPosAlt = self.abstractCreature.pos;
+        destPosAlt.x += (int)(playerData.Cat.input[0].analogueDir.x * skipTiles);
+        destPosAlt.y += (int)(playerData.Cat.input[0].analogueDir.y * skipTiles);
+        return self.AI.pathFinder.PathingCellAtWorldCoordinate(destPosAlt);
     }
 
     public static void Jump(LizardData lizardData)

@@ -35,6 +35,7 @@ public class PlayerData(AbstractCreature owner)
     public IEnumerable<float> BodyChunksMass = new List<float>();
     public int JumpCounter;
     public int LastJumpCounter;
+    public const int MaxJumpCounter = 15;
 
     private const float MassMod = 0.1f;
 
