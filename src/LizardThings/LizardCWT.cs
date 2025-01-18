@@ -25,7 +25,7 @@ public static class LizardCWT
 
 public class LizardData(AbstractCreature owner)
 {
-    private const bool DEBUG = true;
+    private const bool DEBUG = false; //show debug visualizer
 
     public readonly DebugDestinationVisualizer DestinationVisualizer = !DEBUG ? null : new DebugDestinationVisualizer
         (owner.world.game.abstractSpaceVisualizer, owner.world, owner.abstractAI?.RealAI.pathFinder, Color.green);
@@ -45,6 +45,7 @@ public class LizardData(AbstractCreature owner)
     public int JumpCounter;
     public const int JumpLinger = 15;
     public LizardJumpModule.JumpFinder JumpFinder;
+    public bool BitCreature;
 
     public void Update(bool eu)
     {
@@ -71,6 +72,12 @@ public class LizardData(AbstractCreature owner)
                     Jumping = false;
                 }
             }
+        }
+
+        if (BitCreature)
+        {
+            if (Rider == null || !Rider.input[0].pckp)
+                BitCreature = false;
         }
     }
 

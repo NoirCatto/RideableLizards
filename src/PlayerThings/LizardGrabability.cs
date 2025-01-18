@@ -31,4 +31,10 @@ public static class LizardGrabability
         return orig(self, obj, graspused, chunkgrabbed, shareability, dominance, overrideequallydominant, pacifying);
     }
 
+    public static bool PlayerOnIsObjectThrowable(On.Player.orig_IsObjectThrowable orig, Player self, PhysicalObject obj)
+    {
+        if (obj is Lizard liz && !liz.State.dead && liz.LikesPlayer(self))
+            return false;
+        return orig(self, obj);
+    }
 }

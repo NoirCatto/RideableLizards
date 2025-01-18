@@ -33,7 +33,7 @@ public class RideableLizards : BaseUnityPlugin
             IsInit = true;
 
             Hooks.Apply();
-            LizardHeart.LoadAtlases();
+            //LizardHeart.LoadAtlases();
         }
         catch (Exception ex)
         {

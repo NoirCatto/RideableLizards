@@ -5,6 +5,17 @@ namespace RideableLizards.LizardThings;
 
 public static class LizardBehaviors
 {
+    public static LizardAI.Behavior LizardAIOnDetermineBehavior(On.LizardAI.orig_DetermineBehavior orig, LizardAI self)
+    {
+        var behaviour = orig(self);
+
+        if (behaviour == LizardAI.Behavior.ReturnPrey && self.friendTracker?.friend != null)
+            behaviour = LizardAI.Behavior.FollowFriend; //Frick you, no eating, only walk
+
+        return behaviour;
+    }
+
+
     public static float FriendTrackerOnUtility(On.FriendTracker.orig_Utility orig, FriendTracker self)
     {
         var result = orig(self);
@@ -14,7 +25,7 @@ public static class LizardBehaviors
             if (lizardData.Rider != null)
             {
                 var friendBonus =  Mathf.Pow( Mathf.Clamp01(liz.LikeOfPlayer(lizardData.Rider)), 2.5f);
-                result += result * friendBonus;
+                result += result + (friendBonus * 0.55f);
             }
         }
 
@@ -26,6 +37,17 @@ public static class LizardBehaviors
         if (creature is Player player && self.LikesPlayer(player))
             return;
 
+        if (self.TryGetLizardData(out var data))
+        {
+            if (data.Rider != null && !data.Rider.input[0].pckp)
+                return;
+        }
+
+        var graspNull = self.grasps[0] == null;
+
         orig(self, creature);
+
+        if (graspNull && self.grasps[0] != null && data != null)
+            data.BitCreature = true;
     }
 }

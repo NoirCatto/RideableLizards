@@ -122,7 +122,7 @@ public static class LizardMovement
         }
     }
 
-    public static void LizardAIOnUpdate(On.LizardAI.orig_Update orig, LizardAI ai)
+    public static void LizardAIOnUpdate(LizardAI ai)
     {
         if (ai.lizard.TryGetLizardData(out var lizardData) && lizardData.Rider != null && ai.lizard.room != null)
         {
@@ -132,8 +132,6 @@ public static class LizardMovement
 
             ai.friendTracker.friendDest = GetDestination(lizardData);
         }
-
-        orig(ai);
     }
 
     public static float FriendTrackerOnRunSpeed(On.FriendTracker.orig_RunSpeed orig, FriendTracker self)

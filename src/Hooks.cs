@@ -11,8 +11,20 @@ public static class Hooks
         On.Lizard.Update += LizardOnUpdate;
         On.Lizard.AttemptBite += LizardBehaviors.LizardOnAttemptBite;
         On.Lizard.Act += LizardMovement.LizardOnAct;
+        On.Lizard.ActAnimation += LizardAttacks.LizardOnActAnimation;
+        IL.Lizard.ActAnimation += LizardAttacks.LizardILActAnimation;
+        On.Lizard.EnterAnimation += LizardAttacks.LizardOnEnterAnimation;
+        IL.LizardTongue.LashOut += LizardAttacks.LizardTongueILLashOut;
         On.LizardGraphics.Update += LizardMovement.LizardGraphicsOnUpdate;
-        On.LizardAI.Update += LizardMovement.LizardAIOnUpdate;
+        On.LizardAI.Update += (orig, self) =>
+        {
+            LizardMovement.LizardAIOnUpdate(self);
+            orig(self);
+            LizardAttacks.LizardAIOnUpdate(self);
+        };
+        On.LizardAI.LizardSpitTracker.Update += LizardAttacks.LizardSpitTrackerOnUpdate;
+        On.LizardAI.LizardSpitTracker.AimPos += LizardAttacks.LizardSpitTrackerOnAimPos;
+        On.LizardAI.DetermineBehavior += LizardBehaviors.LizardAIOnDetermineBehavior;
         On.FriendTracker.RunSpeed += LizardMovement.FriendTrackerOnRunSpeed;
         On.FriendTracker.Utility += LizardBehaviors.FriendTrackerOnUtility;
         On.ShortcutGraphics.Draw += LizardShortcutGraphics.ShortcutGraphicsOnDraw;
@@ -21,7 +33,9 @@ public static class Hooks
         On.Player.Update += PlayerOnUpdate;
         On.Player.Grabability += LizardGrabability.PlayerOnGrabability;
         On.Player.IsCreatureLegalToHoldWithoutStun += LizardGrabability.PlayerOnIsCreatureLegalToHoldWithoutStun;
+        On.Player.IsObjectThrowable += LizardGrabability.PlayerOnIsObjectThrowable;
         On.Creature.Grab += LizardGrabability.CreatureOnGrab;
+        On.AbstractCreature.IsEnteringDen += Fixes.AbstractCreatureOnIsEnteringDen;
     }
 
     private static void LizardOnUpdate(On.Lizard.orig_Update orig, Lizard self, bool eu)
