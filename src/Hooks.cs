@@ -29,12 +29,14 @@ public static class Hooks
         On.FriendTracker.Utility += LizardBehaviors.FriendTrackerOnUtility;
         On.ShortcutGraphics.Draw += LizardShortcutGraphics.ShortcutGraphicsOnDraw;
         On.ShortcutGraphics.GenerateSprites += LizardShortcutGraphics.ShortcutGraphicsOnGenerateSprites;
+        On.LizardAI.GiftRecieved += LizardLike.LizardAIOnGiftRecieved;
 
         On.Player.Update += PlayerOnUpdate;
         On.Player.Grabability += LizardGrabability.PlayerOnGrabability;
         On.Player.IsCreatureLegalToHoldWithoutStun += LizardGrabability.PlayerOnIsCreatureLegalToHoldWithoutStun;
         On.Player.IsObjectThrowable += LizardGrabability.PlayerOnIsObjectThrowable;
         On.Creature.Grab += LizardGrabability.CreatureOnGrab;
+        On.Player.Tongue.Shoot += Fixes.TongueOnShoot;
         On.AbstractCreature.IsEnteringDen += Fixes.AbstractCreatureOnIsEnteringDen;
     }
 

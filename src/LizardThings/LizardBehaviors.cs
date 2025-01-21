@@ -8,9 +8,13 @@ public static class LizardBehaviors
     public static LizardAI.Behavior LizardAIOnDetermineBehavior(On.LizardAI.orig_DetermineBehavior orig, LizardAI self)
     {
         var behaviour = orig(self);
-
-        if (behaviour == LizardAI.Behavior.ReturnPrey && self.friendTracker?.friend != null)
+        
+        if (self.lizard.TryGetLizardData(out var data) && data.Rider != null &&
+            behaviour == LizardAI.Behavior.ReturnPrey && self.friendTracker?.friend != null &&
+            data.ReturnPreyDelay <= 0)
+        {
             behaviour = LizardAI.Behavior.FollowFriend; //Frick you, no eating, only walk
+        }
 
         return behaviour;
     }

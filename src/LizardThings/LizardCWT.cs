@@ -25,10 +25,9 @@ public static class LizardCWT
 
 public class LizardData(AbstractCreature owner)
 {
-    private const bool DEBUG = false; //show debug visualizer
-
-    public readonly DebugDestinationVisualizer DestinationVisualizer = !DEBUG ? null : new DebugDestinationVisualizer
-        (owner.world.game.abstractSpaceVisualizer, owner.world, owner.abstractAI?.RealAI.pathFinder, Color.green);
+    // private const bool DEBUG = false; //show debug visualizer
+    // public readonly DebugDestinationVisualizer DestinationVisualizer = !DEBUG ? null : new DebugDestinationVisualizer
+    //     (owner.world.game.abstractSpaceVisualizer, owner.world, owner.abstractAI?.RealAI.pathFinder, Color.green);
 
     public readonly AbstractCreature Owner = owner;
     public Lizard Liz => Owner.realizedCreature as Lizard;
@@ -40,7 +39,8 @@ public class LizardData(AbstractCreature owner)
             return Liz?.grabbedBy.Select(x => x?.grabber).OfType<Player>().Where(player => Liz.LikesPlayer(player));
         }
     }
-
+    
+    public int ReturnPreyDelay;
     public bool Jumping;
     public int JumpCounter;
     public const int JumpLinger = 15;
@@ -49,13 +49,13 @@ public class LizardData(AbstractCreature owner)
 
     public void Update(bool eu)
     {
-        if (DEBUG)
-        {
-            DestinationVisualizer.Update();
-            var room = Liz?.room;
-            if (room != null && DestinationVisualizer.room != room)
-                DestinationVisualizer.ChangeRooms(room);
-        }
+        // if (DEBUG)
+        // {
+        //     DestinationVisualizer.Update();
+        //     var room = Liz?.room;
+        //     if (room != null && DestinationVisualizer.room != room)
+        //         DestinationVisualizer.ChangeRooms(room);
+        // }
 
         var lizGraphics = (LizardGraphics)Liz?.graphicsModule;
         if (lizGraphics != null)
@@ -79,6 +79,11 @@ public class LizardData(AbstractCreature owner)
             if (Rider == null || !Rider.input[0].pckp)
                 BitCreature = false;
         }
+
+        if (Rider != null)
+            ReturnPreyDelay = 100;
+        else if (ReturnPreyDelay > 0)
+            ReturnPreyDelay -= 1;
     }
 
 }

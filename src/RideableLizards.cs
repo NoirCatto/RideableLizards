@@ -3,6 +3,7 @@ using System.Security;
 using System.Security.Permissions;
 using BepInEx;
 using BepInEx.Logging;
+using RideableLizards.LizardThings;
 
 #pragma warning disable CS0618
 
@@ -33,7 +34,7 @@ public class RideableLizards : BaseUnityPlugin
             IsInit = true;
 
             Hooks.Apply();
-            //LizardHeart.LoadAtlases();
+            LizardHeart.LoadAtlases();
         }
         catch (Exception ex)
         {

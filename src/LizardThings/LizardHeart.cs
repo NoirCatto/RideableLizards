@@ -1,7 +1,7 @@
 using RWCustom;
 using UnityEngine;
 
-namespace RideableLizards;
+namespace RideableLizards.LizardThings;
 
 public class LizardHeart : CosmeticSprite
 {

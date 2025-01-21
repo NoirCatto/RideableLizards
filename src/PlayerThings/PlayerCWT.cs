@@ -30,7 +30,7 @@ public class PlayerData(AbstractCreature owner)
     public readonly AbstractCreature Owner = owner;
     public Player Cat => Owner.realizedCreature as Player;
 
-    public bool RidingALizard => Cat != null && Cat.grasps.Any(x => x?.grabbed is Lizard liz && liz.LikesPlayer(Cat));
+    public bool RidingALizard => Cat != null && Cat.grasps.Any(x => x?.grabbed is Lizard liz && liz.State.alive && liz.LikesPlayer(Cat));
     public bool LastRidingALizard;
     public IEnumerable<float> BodyChunksMass = new List<float>();
     public int JumpCounter;
