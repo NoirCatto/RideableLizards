@@ -4,20 +4,19 @@ The mod is for v1.9 version of Rain World!
 Description : <br> 
 Grab onto your tamed lizards and ride along with them!
 
-Controls for lizard's abilities are the same as in Safari mode :
+Controls for lizard's abilities:
 - Pickup = Bite
-- Jump = Tongue
-- Attack = Spit/Jump
+- Jump = Jump
+- Attack = Spit/Tongue
 - Down + Pickup = Let go of the lizard
 
+Non-cyan lizards can perform a small hop.
+
 Creature shortcuts and dens will be shown whenever riding a tamed lizard, and yes, you can use them!
-<br>
-(P.S. creatures shortcuts don't have the same animations as other pipes do, but they still take as much time to use as travelling a pipe - the downtime period after going into a creature shortcut is not a bug!)
 
+*Also includes a new particle effect whenever you tame a lizard*
 ***
-Please report any bugs to me! 
-
-P.S.S. - This is not the same as the v1.5 RW version! This is a completely re-written mod, so the gameplay may feel a bit different too.
+Please report any bugs to me!
 ***
 [Steam Workshop Link](https://steamcommunity.com/sharedfiles/filedetails/?id=2923554821)
 <br>
