@@ -11,7 +11,7 @@ public static class LizardBehaviors
         
         if (self.lizard.TryGetLizardData(out var data) && data.Rider != null &&
             behaviour == LizardAI.Behavior.ReturnPrey && self.friendTracker?.friend != null &&
-            data.ReturnPreyDelay <= 0)
+            data.ReturnPreyDelay > 0)
         {
             behaviour = LizardAI.Behavior.FollowFriend; //Frick you, no eating, only walk
         }
